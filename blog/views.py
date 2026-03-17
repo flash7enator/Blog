@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 
 import datetime
-from .models import Post, Category, Tag, Comment
+from .models import Post, Category, Tag, Comment, SubComment
 
 
 def get_categories():
