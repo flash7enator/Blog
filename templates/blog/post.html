@@ -48,6 +48,7 @@
         <h4 class="media-heading">{{ c.user }}
             <small>{{ c.created_at }}</small>
         </h4>
+
         {{ c.text }}
 
         {% for sub in c.subcomments.all %}
