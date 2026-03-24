@@ -1,0 +1,16 @@
+{% extends "layout/main_layout.html" %}
+
+
+{% load crispy_forms_tags %}
+{% block 'content' %}
+<h1>Edit post</h1>
+
+<form action="{% url 'post_edit' post.slug %}" method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <button type="submit" value="save" class="btn btn-default">Save</button>
+
+</form>
+
+
+{% endblock %}

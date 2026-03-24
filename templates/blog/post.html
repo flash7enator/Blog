@@ -1,4 +1,6 @@
 {% extends "layout/main_layout.html" %}
+{% load crispy_forms_tags %}
+
 
 {% block 'content' %}
 <!-- Blog Post -->
@@ -24,14 +26,17 @@
 <!-- Post Content -->
 <p class="lead">{{ post.content }}</p>
 <hr>
+
+<a href="{% url 'post_edit' post.slug %}"class="btn btn-primary">Edit</a>
+<a href="{% url 'post_delete' post.slug %}"class="btn btn-danger">Delete</a>
 <!-- Blog Comments -->
 <!-- Comments Form -->
 <div class="well">
     <h4>Leave a Comment:</h4>
-    <form role="form">
-        <div class="form-group">
-            <textarea class="form-control" rows="3"></textarea>
-        </div>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>

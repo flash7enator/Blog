@@ -1,0 +1,14 @@
+{% extends "layout/main_layout.html" %}
+{% load crispy_forms_tags %}
+{% block 'content' %}
+
+
+<h2>Login</h2>
+<form method="POST" action=" {% url 'login' %} ">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" class="btn btn-succsses" value="Увійти">
+</form>
+
+
+{% endblock %}

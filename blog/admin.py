@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 
-from .models import Post, Category, Tag, Comment, SubComment
+from .models import Post, Category, Tag, Comment, SubComment, Subscriber, Profile
 
 
 @admin.register(Category)
@@ -30,3 +29,15 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(SubComment)
 class SubCommentAdmin(admin.ModelAdmin):
     list_display = ('comment', 'user', 'created_at')
+
+
+@admin.register(Subscriber)
+class SubscriberAdmin(admin.ModelAdmin):
+    list_display = ('email', 'created_at')
+    search_fields = ('email',)
+
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'phone')
+    search_fields = ('user__username', 'user__email', 'phone')
