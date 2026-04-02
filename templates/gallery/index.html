@@ -4,7 +4,7 @@
 {% block 'content' %}
 
 <h1>Gallery</h1>
-<p><a class="btn btn-primary" href="{% url 'gallery_upload' %}">Upload</a></p>
+<p><a class="btn btn-primary" href="{% url 'gallery:gallery_upload' %}">Upload</a></p>
 
 {% for image in images %}
     <h2>{{ image.title }}</h2>

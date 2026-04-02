@@ -1,14 +1,66 @@
 {% extends "base.html" %}
 
-{% block  main %}
-{% load thumbnail %}
+{% block main %}
+<div class="container py-4">
+    <div class="row g-5 align-items-start">
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm" style="height: 520px; display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden;">
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.title }}"
+                    class="img-fluid rounded"
+                    style="max-width: 100%; max-height: 480px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;"
+                >
+            </div>
+        </div>
 
-<h1>Product detail</h1>
+        <div class="col-12 col-lg-6">
+            <div class="mb-2">
+                <span class="badge bg-secondary">{{ product.category.name }}</span>
+            </div>
 
-<h1>{{ product.title }}</h1>
-<img src="{{ product.image.url }}">
-<h2>{{ product.price }}</h2>
-<a class="btn btn-primary" href="{% url 'shop:cart_add' product_id=product.id %}">Add to cart</a>
+            <h1 class="mb-3">{{ product.title }}</h1>
+            <h3 class="mb-4">${{ product.price }}</h3>
 
+            <p class="text-muted mb-4">{{ product.description }}</p>
 
+            <div class="d-flex gap-2 flex-wrap mb-4">
+                <a class="btn btn-dark" href="{% url 'shop:cart_add' product_id=product.id %}">
+                    Додати в кошик
+                </a>
+
+                {% if user.is_authenticated %}
+                    <a href="{% url 'shop:toggle_wishlist' product.id %}"
+                       class="btn {% if is_in_wishlist %}btn-danger{% else %}btn-outline-danger{% endif %}">
+                        {% if is_in_wishlist %}У бажаному ♥{% else %}Додати в бажане ♡{% endif %}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if related_products %}
+        <div class="mt-5">
+            <h3 class="mb-4">Схожі товари</h3>
+            <div class="row g-4">
+                {% for item in related_products %}
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card h-100 shadow-sm border-0">
+                            <a href="{% url 'shop:product_detail' item.slug %}">
+                                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}" style="height: 220px; object-fit: cover;">
+                            </a>
+                            <div class="card-body">
+                                <h6 class="card-title">{{ item.title }}</h6>
+                                <p class="mb-2">${{ item.price }}</p>
+                                <a href="{% url 'shop:product_detail' item.slug %}" class="btn btn-outline-dark btn-sm">
+                                    Переглянути
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

@@ -43,23 +43,29 @@
                     </a>
                 </li>
                 {% endif %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       data-bs-toggle="dropdown">
+                <li class="nav-item dropdown d-flex align-items-center">
+                    <a class="nav-link px-3" href="{% url 'shop:product_list' %}">
                         Shop
                     </a>
 
+                    <button class="btn btn-link nav-link dropdown-toggle shop-dropdown-toggle p-0"
+                            type="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                    </button>
+
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item"
-                               href="{% url 'shop:product_list' %}">
+                            <a class="dropdown-item" href="{% url 'shop:product_list' %}">
                                 All products
                             </a>
                         </li>
                         {% for category in categories %}
-                        <li><a class="dropdown-item" href="{% url 'shop:category_products' slug=category.slug %}">
-                            {{ category.name }}</a></li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'shop:category_products' slug=category.slug %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
                         {% endfor %}
                     </ul>
                 </li>
