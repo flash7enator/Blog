@@ -5,9 +5,13 @@ from .models import Post, Comment, Subscriber
 
 
 class PostForm(forms.ModelForm):
+    image= forms.ImageField(required=False)
+
     class Meta:
         model = Post
         exclude = ('user', 'published_date', 'slug')
+
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
@@ -24,6 +28,7 @@ class SubscribeForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Enter your email'})
         }
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username')
@@ -46,5 +51,7 @@ class RegisterForm(forms.ModelForm):
         if password != password_confirm:
             raise forms.ValidationError("Passwords don't match")
         return cleen_data
+
+
 
 

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<script>
+    function getCSRFToken(){
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    }
+
+    function addToCart(productId){
+        fetch('/cart/add-to-catr-ajax/', {
+                method: 'POST',
+                 headers:{
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCSRFToken()
+                    },
+                body: 'product_id' + productId
+            })
+            .then(response => response.json())
+            .then(data => {document.getElementById('cart-count').innerText = data.count
+        });
+    }
+
+
+</script>
+{% load thumbnail %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-md-8">
+            <h1>Product list</h1>
+
+            {% for product in products %}
+
+            <div class="card col-12 col-md-6 shadow p-2 bg-light">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="..." style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.title }}</h5>
+                    <p class="card-text">{{ product.description|truncatewords:10 }}</p>
+                    <p>${{ product.price }}</p>
+                    <a href="{% url 'shop:product_detail' product.slug %}" class="btn btn-primary">Read more</a>
+
+                    <a>
+                        <button onclick="addToCart" ({{ product.id }})>Add to cart </button>
+                    </a>
+
+                </div>
+            </div>
+            {% empty %}
+            <p>No products</p>
+            {% endfor %}
+
+            <div class="crad col-12 col-md-4">
+                <form method="GET">
+                    <input type="number" name="max_price" placeholder="max price" class="form-control mb-2"
+                           value="{{ request.GET.max_price }}">
+                    <input type="number" name="min_price" placeholder="min price" class="form-control mb-2"
+                           value="{{ request.GET.min_price }}">
+
+                    <select name="sort">
+                        <option>Без сортування</option>
+                        <option value="price_asc">Дешеві - дорогі</option>
+                        <option value="price_desc">Дорогі - дешеві</option>
+                        <option value="price_desc">Нові</option>
+
+                    </select>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+
+                <a>
+                    <button onclick="addToCart"  </button>
+                </a>
+
+            </div>
+        </div>
+
+        {% endblock %}

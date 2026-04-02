@@ -5,30 +5,54 @@
 {% block 'content' %}
 <!-- Blog Post -->
 <!-- Title -->
-<h1>{{ post.title}}</h1>
-<p><strong>Tags:</strong>
+<h1>{{ post.title }}</h1>
+
+<p>
+    <strong>Tags:</strong>
     {% for tag in post.tags.all %}
-    <a href="{% url 'tag' slug=tag.slug %}">{{ tag.name }}</a>
+        <a href="{% url 'tag' slug=tag.slug %}">{{ tag.name }}</a>
     {% empty %}
-    <span>No tags</span>
+        <span>No tags</span>
     {% endfor %}
-    <!-- Author -->
+</p>
+
+<!-- Author -->
 <p class="lead">
     by <a href="#">{{ post.user }}</a>
 </p>
-<hr>
-<!-- Date/Time -->
-<p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
-<hr>
-<!-- Preview Image -->
-<img class="img-responsive" src="{{ post.image }}" alt="">
-<hr>
-<!-- Post Content -->
-<p class="lead">{{ post.content }}</p>
+
 <hr>
 
-<a href="{% url 'post_edit' post.slug %}"class="btn btn-primary">Edit</a>
-<a href="{% url 'post_delete' post.slug %}"class="btn btn-danger">Delete</a>
+<!-- Date/Time -->
+<p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
+
+<hr>
+
+<!-- Preview Image / Gallery -->
+{% if post.photos.all %}
+    <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+        {% for photo in post.photos.all %}
+            <div style="flex: 1 1 250px; max-width: 100%; overflow: hidden; border-radius: 8px;">
+                <img
+                    src="{{ photo.image.url }}"
+                    alt="{{ post.title }} photo {{ forloop.counter }}"
+                    style="width: 100%; height: 220px; object-fit: cover; display: block;"
+                >
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<hr>
+
+<!-- Post Content -->
+<p class="lead">{{ post.content }}</p>
+
+<hr>
+
+<a href="{% url 'post_edit' post.slug %}" class="btn btn-primary">Edit</a>
+<a href="{% url 'post_delete' post.slug %}" class="btn btn-danger">Delete</a>
+
 <!-- Blog Comments -->
 <!-- Comments Form -->
 <div class="well">
@@ -40,40 +64,43 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
 <hr>
+
 <!-- Posted Comments -->
 <!-- Comment -->
 {% for c in comments %}
+    <div class="media">
+        <a class="pull-left" href="#">
+            <img class="media-object" src="http://placehold.it/64x64" alt="">
+        </a>
+        <div class="media-body">
+            <h4 class="media-heading">
+                {{ c.user }}
+                <small>{{ c.created_at }}</small>
+            </h4>
 
-<div class="media">
-    <a class="pull-left" href="#">
-        <img class="media-object" src="http://placehold.it/64x64" alt="">
-    </a>
-    <div class="media-body">
-        <h4 class="media-heading">{{ c.user }}
-            <small>{{ c.created_at }}</small>
-        </h4>
+            {{ c.text }}
 
-        {{ c.text }}
-
-        {% for sub in c.subcomments.all %}
-        <!-- Nested Comment -->
-        <div class="media">
-            <a class="pull-left" href="#">
-                <img class="media-object" src="http://placehold.it/64x64" alt="">
-            </a>
-            <div class="media-body">
-                <h4 class="media-heading">{{ sub.user }}
-                    <small>{{ sub.created_at }}</small>
-                </h4>
-                {{ sub.text }}
-            </div>
+            {% for sub in c.subcomments.all %}
+                <!-- Nested Comment -->
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">
+                            {{ sub.user }}
+                            <small>{{ sub.created_at }}</small>
+                        </h4>
+                        {{ sub.text }}
+                    </div>
+                </div>
+                <!-- End Nested Comment -->
+            {% endfor %}
         </div>
-        <!-- End Nested Comment -->
-        {% endfor %}
     </div>
-</div>
-
 {% empty %}
 {% endfor %}
+
 {% endblock %}

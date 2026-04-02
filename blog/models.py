@@ -26,8 +26,7 @@ class Post(models.Model):
     published_date = models.DateTimeField(auto_now_add=True, verbose_name="Дата публікації")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Категорія")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")
-    image = models.URLField(
-        default="https://soliloquywp.com/wp-content/uploads/2016/08/How-to-Set-a-Default-Featured-Image-in-WordPress.png")
+    main_image = models.ImageField(upload_to = 'blog/posts/main/', null=True, blank=True)
     slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
     tags = models.ManyToManyField('Tag', blank=True, related_name='text', verbose_name="Теги")
 
@@ -39,7 +38,7 @@ class Post(models.Model):
             while Post.objects.filter(slug=slug).exists():
                 slug = f"{base_slug}_{counter}"
                 counter += 1
-            self.slug = slugify
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -111,3 +110,11 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Профіль"
         verbose_name_plural = "Профілі"
+
+
+class Photo(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='photos')
+    image = models.ImageField(upload_to = 'blog/posts/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_main = models.BooleanField(default=False)
+

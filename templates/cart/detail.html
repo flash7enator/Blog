@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+
+<h2>Your cart</h2>
+
+<table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+    </tr>
+    {% for item in cart %}
+    <tr>
+        <td>{{ item.product.title}}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price}}</td>
+        <td>{{ item.total_price}}</td>
+    </tr>
+    {% endfor%}
+    <tr>
+        <td colspan='3'>Total:</td>
+        <td>${{ cart.get_total_price }}</td>
+    </tr>
+</table>
+
+
+{% endblock %}

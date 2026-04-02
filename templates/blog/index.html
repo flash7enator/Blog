@@ -6,11 +6,11 @@
 {% for post in posts %}
         <!-- First Blog Post -->
         <h2>
-            <a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a>
+            <a href="{% url 'blog:post_detail' slug=post.slug %}">{{ post.title }}</a>
         </h2>
             <p><strong>Tags:</strong>
                 {% for tag in post.tags.all %}
-                <a href="{% url 'tag' slug=tag.slug %}">{{ tag.name }}</a>
+                <a href="{% url 'blog:tag' slug=tag.slug %}">{{ tag.name }}</a>
                     {% empty %}
                 <span>No tags</span>
                 {% endfor %}
@@ -21,11 +21,16 @@
         </p>
         <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
         <hr>
-        <img class="img-responsive" src="{{ post.image }}" alt="">
+    {% for photo in post.photos.all %}
+    {% if photo.is_main %}
+        <img class="img-responsive" src="{{ photo.image.url }}" alt="">
+    {% endif %}
+    {% endfor %}
         <hr>
         <p>{{ post.content|truncatewords:15 }}</p>
-        <a class="btn btn-primary" href="{% url 'post_detail' slug=post.slug %}">"Read More"<span
+        <a class="btn btn-primary" href="{% url 'blog:post_detail' slug=post.slug %}">"Read More"<span
                 class="glyphicon glyphicon-chevron-right"></span></a>
+
 
         <hr>
 {% endfor %}
