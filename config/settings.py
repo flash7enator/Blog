@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'gallery',
     'shop',
     'cart',
+    'order',
     'easy_thumbnails',
 ]
 

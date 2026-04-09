@@ -3,12 +3,17 @@
 {% block main %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-10">
+        <div class="col-12 col-lg-11">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="mb-0">Кошик</h2>
-                <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark">
-                    ← Продовжити покупки
-                </a>
+                <div class="d-flex gap-2">
+                    <a href="{% url 'shop:product_list' %}" class="btn btn-outline-dark">
+                        ← Продовжити покупки
+                    </a>
+                    <a href="{% url 'shop:cart_clear' %}" class="btn btn-outline-danger">
+                        Очистити кошик
+                    </a>
+                </div>
             </div>
 
             <div class="card shadow-sm border-0">
@@ -19,42 +24,62 @@
                                 <thead class="table-light">
                                     <tr>
                                         <th>Товар</th>
-                                        <th class="text-center">Кількість</th>
+                                        <th>Назва</th>
                                         <th class="text-center">Ціна</th>
+                                        <th class="text-center">Кількість</th>
                                         <th class="text-end">Сума</th>
+                                        <th class="text-end">Дія</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for item in cart %}
                                         <tr>
+                                            <td style="width: 110px;">
+                                                {% if item.product.image %}
+                                                    <img
+                                                        src="{{ item.product.image.url }}"
+                                                        alt="{{ item.product.title }}"
+                                                        style="width: 80px; height: 80px; object-fit: contain;"
+                                                    >
+                                                {% endif %}
+                                            </td>
                                             <td>
                                                 <strong>{{ item.product.title }}</strong>
                                             </td>
                                             <td class="text-center">
-                                                {{ item.quantity }}
+                                                ${{ item.price }}
                                             </td>
                                             <td class="text-center">
-                                                ${{ item.price }}
+                                                <div class="d-inline-flex align-items-center gap-2">
+                                                    <a href="{% url 'shop:cart_decrease' item.product.id %}" class="btn btn-sm btn-outline-dark">−</a>
+                                                    <span>{{ item.quantity }}</span>
+                                                    <a href="{% url 'shop:cart_increase' item.product.id %}" class="btn btn-sm btn-outline-dark">+</a>
+                                                </div>
                                             </td>
                                             <td class="text-end">
                                                 <strong>${{ item.total_price }}</strong>
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{% url 'shop:cart_remove' item.product.id %}" class="btn btn-sm btn-outline-danger">
+                                                    Видалити
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3" class="text-end fw-bold">Всього:</td>
+                                        <td colspan="4" class="text-end fw-bold">Загальна сума:</td>
                                         <td class="text-end fw-bold fs-5">${{ cart.get_total_price }}</td>
+                                        <td></td>
                                     </tr>
                                 </tfoot>
                             </table>
                         </div>
 
-                        <div class="d-flex justify-content-end mt-4">
-                            <a href="#" class="btn btn-dark">
-                                Оформити замовлення
-                            </a>
+                        <a href="{% url 'order:order_create' %}" class="btn btn-dark">
+                            Оформити замовлення
+                        </a>
                         </div>
                     {% else %}
                         <div class="text-center py-5">

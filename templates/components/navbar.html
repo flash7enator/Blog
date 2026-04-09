@@ -85,7 +85,9 @@
                 {% endif %}
 
                 <li class="nav-item">
-                    <a class="nav-link px-3" href="{% url 'shop:cart_detail' %}">Cart<span id="cart-count">0</span></a>
+                    <a class="nav-link px-3" href="{% url 'shop:cart_detail' %}">
+                        Cart (<span id="cart-count">{{ cart_count }}</span>)
+                    </a>
 
                 </li>
             </ul>
