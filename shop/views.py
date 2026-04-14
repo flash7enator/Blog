@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, WishlistItem
@@ -36,11 +37,15 @@ def product_list(request):
             user=request.user
         ).values_list('product_id', flat=True)
 
+    paginator = Paginator(products, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(
         request,
         'shop/product_list.html',
         {
-            "products": products,
+            "page_obj": page_obj,
             "categories": categories,
             "liked_product_ids": liked_product_ids,
         }

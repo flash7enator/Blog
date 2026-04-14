@@ -60,7 +60,7 @@
             </div>
 
             <div class="row g-4">
-                {% for product in products %}
+                {% for product in page_obj %}
                     <div class="col-12 col-sm-6 col-xl-4">
                         <div class="card h-100 shadow-sm border-0">
                             <a href="{% url 'shop:product_detail' product.slug %}" class="d-block text-center" style="padding: 15px; background: #fff;">
@@ -109,6 +109,32 @@
                     </div>
                 {% endfor %}
             </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <div class="pagination justify-content-center mt-4 gap-2 flex-wrap">
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-outline-primary" href="?page=1&category={{ request.GET.category }}&min_price={{ request.GET.min_price }}&max_price={{ request.GET.max_price }}&sort={{ request.GET.sort }}">
+                            First
+                        </a>
+                        <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}&category={{ request.GET.category }}&min_price={{ request.GET.min_price }}&max_price={{ request.GET.max_price }}&sort={{ request.GET.sort }}">
+                            Previous
+                        </a>
+                    {% endif %}
+
+                    <span class="btn btn-dark disabled">
+                        Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}&category={{ request.GET.category }}&min_price={{ request.GET.min_price }}&max_price={{ request.GET.max_price }}&sort={{ request.GET.sort }}">
+                            Next
+                        </a>
+                        <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}&category={{ request.GET.category }}&min_price={{ request.GET.min_price }}&max_price={{ request.GET.max_price }}&sort={{ request.GET.sort }}">
+                            Last
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

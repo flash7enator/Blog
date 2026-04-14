@@ -2,7 +2,21 @@
 
 {% block main %}
 <div class="container mt-5">
-    <h2 class="mb-4">Замовлення успішно створено!</h2>
-    <p>Номер замовлення: {{ order.id }}</p>
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="mb-4">Замовлення успішно створено</h2>
+
+            <p><strong>Номер замовлення:</strong> {{ order.order_number }}</p>
+            <p><strong>Дата створення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+            <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+            <p><strong>Сума замовлення:</strong> ${{ order.get_total_cost }}</p>
+
+            <hr>
+
+            <p class="mb-0">
+                Дякуємо, {{ order.first_name }}! Твоє замовлення прийнято в обробку.
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}
